@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ribs.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="hotkeys.html">
+                hotkeys.coffee
+              </a>
+            
+              
+              <a class="source" href="ribs.html">
+                ribs.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>ribs.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">($=jQuery)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Make <code>Ribs</code> globally accessible.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span>
+    Ribs = root.Ribs ?= {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><code>Ribs.List</code> is the primary Ribs component.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Ribs</span>.<span class="hljs-title">List</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Backbone</span>.<span class="hljs-title">View</span></span>
+  
+        <span class="hljs-attribute">tagName</span>: <span class="hljs-string">"div"</span>
+    
+        <span class="hljs-attribute">itemName</span>: <span class="hljs-string">"item"</span>
+    
+        <span class="hljs-attribute">_ribsEvents</span>: 
+            <span class="hljs-string">'keypress'</span> : <span class="hljs-string">'keypressed'</span>
+            <span class="hljs-string">'focusin'</span> : <span class="hljs-string">'focusin'</span>
+            <span class="hljs-string">'focusout'</span> : <span class="hljs-string">'focusout'</span>
+            <span class="hljs-string">'click .header .toggle input'</span> : <span class="hljs-string">'toggleSelected'</span>
+            <span class="hljs-string">'click .maximize .minimize'</span> : <span class="hljs-string">'toggleVisibility'</span>
+            <span class="hljs-string">'click [data-sort-by]'</span> : <span class="hljs-string">'sortByField'</span>
+
+        <span class="hljs-attribute">_ribsOptions</span>: [<span class="hljs-string">"displayAttributes"</span>, <span class="hljs-string">"actions"</span>, <span class="hljs-string">"itemView"</span>, <span class="hljs-string">"itemName"</span>, <span class="hljs-string">"title"</span>, <span class="hljs-string">"jumpkey"</span>]
+
+        jumpSelector : <span class="hljs-string">".list li:first"</span>
+    
+        focussed : <span class="hljs-literal">false</span>
+
+        selectedByDefault : <span class="hljs-literal">false</span>
+
+        <span class="hljs-attribute">renderOrder</span>: [<span class="hljs-string">"Title"</span>, <span class="hljs-string">"Actions"</span>, <span class="hljs-string">"Header"</span>, <span class="hljs-string">"List"</span>, <span class="hljs-string">"Footer"</span>]
+    
+        constructor : <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
+    
+            <span class="hljs-property">@sortArrows</span> = {}
+            <span class="hljs-property">@sortArrows</span>[-<span class="hljs-number">1</span>] = <span class="hljs-string">"↓"</span>
+            <span class="hljs-property">@sortArrows</span>[<span class="hljs-number">1</span>] = <span class="hljs-string">"↑"</span>
+
+            <span class="hljs-property">@itemView</span> ?= Ribs.ListItem
+            <span class="hljs-property">@actionView</span> ?= Ribs.BatchAction
+    
+            <span class="hljs-property">@events</span> = _.extend {}, <span class="hljs-property">@events</span>, <span class="hljs-property">@_ribsEvents</span>
+
+            <span class="hljs-property">@sortingDirection</span> = {}
+            <span class="hljs-property">@sortingBy</span> = <span class="hljs-string">"id"</span>
+
+            @[k] = options[k] <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-property">@_ribsOptions</span> <span class="hljs-keyword">when</span> options[k]?</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Lazily construct global keyboard manager, if found</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@keyboardManager</span> = Ribs.getKeyboardManager?()
+
+            <span class="hljs-property">@initializeHotKeys</span>() <span class="hljs-keyword">if</span> <span class="hljs-property">@keyboardManager</span>?
+
+            <span class="hljs-keyword">super</span>
+
+            <span class="hljs-property">@$el</span>.addClass(<span class="hljs-string">'ribs'</span>)
+
+        <span class="hljs-attribute">setElement</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">super</span>
+            <span class="hljs-property">@build</span>()
+
+        <span class="hljs-attribute">remove</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@removeAllSubviews</span>()
+            <span class="hljs-property">@keyboardManager</span>?.deregisterView <span class="hljs-property">@keyboardNamespace</span>
+            <span class="hljs-keyword">super</span>
+
+        <span class="hljs-attribute">removeAllSubviews</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@removeSubviews</span> <span class="hljs-string">"list"</span>
+            <span class="hljs-property">@removeSubviews</span> <span class="hljs-string">"action"</span>
+
+        <span class="hljs-attribute">removeSubviews</span>: <span class="hljs-function"><span class="hljs-params">(type)</span> -&gt;</span>
+            <span class="hljs-keyword">if</span> l = <span class="hljs-property">@subviews</span>(type)
+                <span class="hljs-keyword">for</span> subview <span class="hljs-keyword">in</span> l
+                    subview.remove()
+            @[<span class="hljs-string">"_<span class="hljs-subst">#{type}</span>Subviews"</span>] = []
+
+        <span class="hljs-attribute">subviews</span>: <span class="hljs-function"><span class="hljs-params">(type)</span> -&gt;</span>
+            @[<span class="hljs-string">"_<span class="hljs-subst">#{type}</span>Subviews"</span>]
+
+
+        <span class="hljs-attribute">build</span>:<span class="hljs-function"> -&gt;</span>
+
+            <span class="hljs-property">@removeAllSubviews</span>()
+            <span class="hljs-property">@$el</span>.empty()
+
+            <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-property">@renderOrder</span>
+                l = t.replace <span class="hljs-regexp">/^./</span>, <span class="hljs-string">"$<span class="hljs-subst">#{t[<span class="hljs-number">0</span>].toLowerCase()}</span>"</span>
+                @[l] = @[<span class="hljs-string">"initialize<span class="hljs-subst">#{t}</span>"</span>]() <span class="hljs-keyword">unless</span> @[<span class="hljs-string">"suppress<span class="hljs-subst">#{t}</span>"</span>] <span class="hljs-keyword">or</span> @[l]?
+                <span class="hljs-property">@$el</span>.append @[l]
+            
+            <span class="hljs-property">@setCollection</span> <span class="hljs-property">@collection</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@collection</span>?
+
+        <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-property">@renderOrder</span>
+                @[<span class="hljs-string">"render<span class="hljs-subst">#{t}</span>"</span>]() <span class="hljs-keyword">unless</span> @[<span class="hljs-string">"suppress<span class="hljs-subst">#{t}</span>"</span>]
+            <span class="hljs-keyword">this</span>
+        
+        <span class="hljs-attribute">setCollection</span>: <span class="hljs-function"><span class="hljs-params">(collection)</span>-&gt;</span>
+            <span class="hljs-property">@collection</span> = collection</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Unbind all events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@stopListening</span> <span class="hljs-property">@collection</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Bind events to collection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@listenTo</span> <span class="hljs-property">@collection</span>, <span class="hljs-string">"add"</span>, <span class="hljs-property">@addItem</span>
+            <span class="hljs-property">@listenTo</span> <span class="hljs-property">@collection</span>, <span class="hljs-string">"sort reset"</span>, <span class="hljs-property">@addAllItems</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>rerender actions, footer, header etc. when list selection changes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> [<span class="hljs-string">"Actions"</span>, <span class="hljs-string">"Footer"</span>, <span class="hljs-string">"Header"</span>]
+                fn = @[<span class="hljs-string">"render<span class="hljs-subst">#{t}</span>"</span>]
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> @[<span class="hljs-string">"suppress<span class="hljs-subst">#{t}</span>"</span>] <span class="hljs-keyword">and</span> _.isFunction fn
+                    <span class="hljs-property">@listenTo</span> <span class="hljs-property">@collection</span>, <span class="hljs-string">"selected deselected add remove"</span>, fn</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>render everything on reset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@listenTo</span> <span class="hljs-property">@collection</span>, <span class="hljs-string">"reset"</span>, <span class="hljs-property">@render</span>
+
+            <span class="hljs-property">@addAllItems</span>()
+
+            <span class="hljs-property">@updateHeaderArrows</span> <span class="hljs-property">@sortingBy</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@suppressHeader</span>
+
+
+        getSelected :<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">return</span> [] <span class="hljs-keyword">unless</span> <span class="hljs-property">@$list</span>?
+            <span class="hljs-property">@$list</span>.find<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">".item.selected"</span>)</span>.<span class="hljs-title">map</span> <span class="hljs-params">(idx, el)</span> =&gt;</span>
+                <span class="hljs-property">@collection</span>.get $(el).data(<span class="hljs-string">"cid"</span>)
+
+        <span class="hljs-attribute">getDeselected</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">return</span> [] <span class="hljs-keyword">unless</span> <span class="hljs-property">@$list</span>?
+            <span class="hljs-property">@$list</span>.find<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">".item:not(.selected)"</span>)</span>.<span class="hljs-title">map</span> <span class="hljs-params">(idx, el)</span> =&gt;</span>
+                <span class="hljs-property">@collection</span>.get $(el).data(<span class="hljs-string">"cid"</span>)
+
+        <span class="hljs-attribute">getNumSelected</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@$list</span>?
+            <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item.selected"</span>).size()
+
+        <span class="hljs-attribute">getNumDeselected</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@$list</span>?
+            <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item:not(.selected)"</span>).size()
+
+        <span class="hljs-attribute">getNumTotal</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@collection</span>?
+            <span class="hljs-property">@collection</span>.length
+            
+        <span class="hljs-attribute">toggleFocussedSelected</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">unless</span> <span class="hljs-property">@suppressToggle</span>
+                <span class="hljs-property">@$</span>(<span class="hljs-string">".item:focus"</span>).trigger <span class="hljs-string">"toggle"</span>
+
+        toggleSelected : <span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-property">@selectedByDefault</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span> 
+                <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item.selected"</span>).trigger <span class="hljs-string">"deselectitem"</span>, <span class="hljs-attribute">silent</span>: <span class="hljs-literal">true</span>
+                <span class="hljs-property">@selectedByDefault</span> = <span class="hljs-literal">false</span>
+                <span class="hljs-property">@collection</span>?.trigger <span class="hljs-string">"deselected"</span>
+            <span class="hljs-keyword">else</span>
+                <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item:not(.selected)"</span>).trigger <span class="hljs-string">"selectitem"</span>, <span class="hljs-attribute">silent</span>: <span class="hljs-literal">true</span>
+                <span class="hljs-property">@selectedByDefault</span> = <span class="hljs-literal">true</span>
+                <span class="hljs-property">@collection</span>?.trigger <span class="hljs-string">"selected"</span>
+
+        invertSelected :<span class="hljs-function"> -&gt;</span>
+            toSelect = <span class="hljs-property">@$list</span>.find(<span class="hljs-string">":not(.item.selected)"</span>)
+            toDeselect = <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item.selected"</span>)
+            toSelect.trigger <span class="hljs-string">"select"</span>
+            toDeselect.trigger <span class="hljs-string">"deselectitem"</span>
+    
+        toggleVisibility :<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@$header</span>.find(<span class="hljs-string">".maximize, .minimize"</span>).toggle()
+
+            <span class="hljs-property">@$el</span>.toggleClass <span class="hljs-string">"minimized"</span>, <span class="hljs-number">100</span>
+
+        <span class="hljs-attribute">sortByField</span>: <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span>
+            field = $(event.target).attr <span class="hljs-string">"data-sort-by"</span>
+            <span class="hljs-keyword">if</span> field? <span class="hljs-keyword">and</span> <span class="hljs-property">@collection</span>?
+                old_field = <span class="hljs-property">@sortingBy</span>
+                <span class="hljs-property">@sortingBy</span> = field
+
+                <span class="hljs-keyword">if</span> field <span class="hljs-keyword">is</span> old_field <span class="hljs-keyword">and</span> field <span class="hljs-keyword">of</span> <span class="hljs-property">@sortingDirection</span>
+                    <span class="hljs-property">@sortingDirection</span>[field] *= -<span class="hljs-number">1</span> <span class="hljs-comment"># toggle direction</span>
+                <span class="hljs-keyword">else</span>
+                    <span class="hljs-property">@sortingDirection</span>[field] = <span class="hljs-number">1</span>
+
+                dir = <span class="hljs-property">@sortingDirection</span>[field]
+
+                <span class="hljs-property">@sortCollection</span> field, dir
+
+                <span class="hljs-property">@updateHeaderArrows</span> field, old_field
+			
+        <span class="hljs-attribute">sortCollection</span>: <span class="hljs-function"><span class="hljs-params">(field, dir)</span> -&gt;</span>
+
+            <span class="hljs-keyword">if</span> <span class="hljs-property">@collection</span>.remoteSort
+                <span class="hljs-property">@collection</span>.trigger <span class="hljs-string">'remoteSort'</span>, field, dir
+            <span class="hljs-keyword">else</span>
+                <span class="hljs-property">@collection</span>.<span class="hljs-function"><span class="hljs-title">comparator</span> = <span class="hljs-params">(ma,mb)</span>=&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>first check if it is a top level attribute</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    a = ma.get field
+                    da = <span class="hljs-property">@displayAttributeMap</span>[field]
+                    <span class="hljs-keyword">if</span> _.isFunction da.map
+                        a = da.map.call @, a, ma
+
+                    b = mb.get field
+                    db = <span class="hljs-property">@displayAttributeMap</span>[field]
+                    <span class="hljs-keyword">if</span> _.isFunction db.map
+                        b = db.map.call @, b, mb</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>make string sorting case insensitive</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    a = a.toLowerCase() <span class="hljs-keyword">if</span> a?.toLowerCase?
+                    b = b.toLowerCase() <span class="hljs-keyword">if</span> b?.toLowerCase?
+
+                    <span class="hljs-keyword">return</span>  <span class="hljs-number">0</span>     <span class="hljs-keyword">if</span> a <span class="hljs-keyword">is</span> b
+                    <span class="hljs-keyword">return</span> +<span class="hljs-number">1</span>*dir <span class="hljs-keyword">if</span> a &gt; b <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> b?
+                    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>*dir <span class="hljs-keyword">if</span> a &lt; b <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> a?
+
+                <span class="hljs-property">@collection</span>.sort()
+
+
+        updateHeaderArrows : <span class="hljs-function"><span class="hljs-params">(field, old_field)</span> -&gt;</span>
+
+            re = <span class="hljs-keyword">new</span> RegExp(<span class="hljs-string">" (<span class="hljs-subst">#{_.values(<span class="hljs-property">@sortArrows</span>).join(<span class="hljs-string">"|"</span>)}</span>)$|$"</span>)
+            dir = <span class="hljs-property">@sortingDirection</span>[field] ? <span class="hljs-number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Remove arrows from previously sorted label.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> old_field?
+                <span class="hljs-property">@$header</span>.find(<span class="hljs-string">"[data-sort-by='<span class="hljs-subst">#{old_field}</span>'] .arrow"</span>).remove()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Put arrows on currently sorted label.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            el = $ "&lt;span /&gt;", class: "arrow", text: @sortArrows[dir]
+            @$header.find("[data-sort-by='#{field}']").append el
+
+    
+        initializeHotKeys: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Register this view</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@keyboardNamespace</span> = <span class="hljs-property">@keyboardManager</span>.registerView <span class="hljs-keyword">this</span>, <span class="hljs-property">@plural</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Bind jump key.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> <span class="hljs-property">@jumpkey</span>?
+                <span class="hljs-property">@keyboardManager</span>.registerJumpKey 
+                    <span class="hljs-attribute">label</span>: <span class="hljs-property">@plural</span>()
+                    <span class="hljs-attribute">jumpkey</span>: <span class="hljs-property">@jumpkey</span>
+                    <span class="hljs-attribute">context</span>: <span class="hljs-keyword">this</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@$</span>(<span class="hljs-property">@jumpSelector</span>).focus()
+                    <span class="hljs-attribute">precondition</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@$el</span>.<span class="hljs-keyword">is</span> <span class="hljs-string">":visible"</span>
+
+            <span class="hljs-keyword">unless</span> <span class="hljs-property">@suppressHotKeys</span>
+
+                hotkeys = [
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"j"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Focus next item"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        $(<span class="hljs-built_in">document</span>.activeElement).nextAll(<span class="hljs-string">".item:visible:not(.disabled):first"</span>).focus()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"J"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Focus last item"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item:last"</span>).focus()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"k"</span> 
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Focus previous item"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        $(<span class="hljs-built_in">document</span>.activeElement).prevAll(<span class="hljs-string">".item:visible:not(.disabled):first"</span>).focus()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"K"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Focus first item"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item:first"</span>).focus()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"x"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Select/deselect item"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@toggleFocussedSelected</span>()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"X"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Select/deselect all"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@toggleSelected</span>()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"_"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Expand/collapse list"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@toggleVisibility</span>()
+                ,
+                    <span class="hljs-attribute">hotkey</span>: <span class="hljs-string">"R"</span>
+                    <span class="hljs-attribute">label</span>: <span class="hljs-string">"Refresh items"</span>
+                    <span class="hljs-attribute">callback</span>:<span class="hljs-function"> =&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>refresh collection (from server)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        <span class="hljs-property">@refresh</span>()
+                ]
+
+
+                <span class="hljs-keyword">for</span> hotkey <span class="hljs-keyword">in</span> hotkeys
+                    hotkey.namespace = <span class="hljs-property">@keyboardNamespace</span>
+                    <span class="hljs-property">@keyboardManager</span>.registerHotKey hotkey
+
+        keypressed : <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span>
+            <span class="hljs-property">@trigger</span> <span class="hljs-string">"keypressed"</span>, event
+            <span class="hljs-property">@keyboardManager</span>.handleKeypress event, <span class="hljs-property">@keyboardNamespace</span>
+    
+        <span class="hljs-attribute">refresh</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-property">@collection</span>.url?
+                <span class="hljs-property">@trigger</span> <span class="hljs-string">'refresh'</span>
+                <span class="hljs-property">@collection</span>.fetch
+                    <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span>
+                        <span class="hljs-property">@$list</span>.find(<span class="hljs-string">".item:first"</span>)?.focus()
+
+        focusin : <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span>
+            <span class="hljs-keyword">unless</span> <span class="hljs-property">@focussed</span>
+                <span class="hljs-property">@focussed</span> = <span class="hljs-literal">true</span>
+            <span class="hljs-property">@$el</span>.addClass <span class="hljs-string">"focussed"</span>
+            <span class="hljs-property">@collection</span>?.trigger <span class="hljs-string">"focusin"</span>
+    
+        focusout : <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-property">@focussed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>need to delay to find the proper next document.activeElement</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                setTimeout<span class="hljs-function"> =&gt;</span>
+                    <span class="hljs-keyword">if</span> <span class="hljs-property">@$</span>(<span class="hljs-built_in">document</span>.activeElement).length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
+                        <span class="hljs-property">@$el</span>.removeClass <span class="hljs-string">"focussed"</span>
+                    <span class="hljs-property">@focussed</span> = <span class="hljs-literal">false</span>
+                    <span class="hljs-property">@collection</span>?.trigger <span class="hljs-string">"focusout"</span>
+                , <span class="hljs-number">10</span>
+        
+        plural :<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@itemNamePlural</span> ? <span class="hljs-property">@itemName</span> + <span class="hljs-string">"s"</span>
+
+        
+        addItem : <span class="hljs-function"><span class="hljs-params">(model)</span> -&gt;</span>
+            <span class="hljs-keyword">if</span> Backbone.<span class="hljs-attribute">View</span>::isPrototypeOf(<span class="hljs-property">@itemView</span>::)
+                itemView = <span class="hljs-property">@itemView</span>
+            <span class="hljs-keyword">else</span>
+                itemView = <span class="hljs-property">@itemView</span>(model)
+            view = <span class="hljs-keyword">new</span> itemView <span class="hljs-attribute">model</span>: model, <span class="hljs-attribute">view</span>: <span class="hljs-keyword">this</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Respect collection insertion order</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            idx = <span class="hljs-property">@collection</span>.indexOf model
+            <span class="hljs-keyword">if</span> <span class="hljs-property">@$list</span>.children().size() <span class="hljs-keyword">in</span> [<span class="hljs-number">0</span>, idx]
+                <span class="hljs-property">@$list</span>.append view.el
+            <span class="hljs-keyword">else</span>
+                <span class="hljs-property">@$list</span>.children(<span class="hljs-string">":nth-child(<span class="hljs-subst">#{ idx + <span class="hljs-number">1</span> }</span>)"</span>).before view.el
+
+            view.render() <span class="hljs-keyword">if</span> <span class="hljs-property">@$el</span>.<span class="hljs-keyword">is</span> <span class="hljs-string">":visible"</span>
+            <span class="hljs-property">@subviews</span>(<span class="hljs-string">"list"</span>).push view
+            view.select() <span class="hljs-keyword">if</span> <span class="hljs-property">@selectedByDefault</span>
+
+        addAllItems :<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@removeSubviews</span> <span class="hljs-string">"list"</span>
+            <span class="hljs-property">@$list</span>.empty()
+            <span class="hljs-property">@collection</span>?.each <span class="hljs-property">@addItem</span>, <span class="hljs-keyword">this</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Gets list item view by model ID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">get</span>: <span class="hljs-function"><span class="hljs-params">(id)</span> -&gt;</span>
+            _.find <span class="hljs-property">@subviews</span><span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"list"</span>)</span>, <span class="hljs-params">(view)</span> -&gt;</span>
+                view.model.id == id</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Gets list item view by CID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">getByCid</span>: <span class="hljs-function"><span class="hljs-params">(cid)</span> -&gt;</span>
+            _.find <span class="hljs-property">@subviews</span><span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">"list"</span>)</span>, <span class="hljs-params">(view)</span> -&gt;</span>
+                view.model.cid == cid</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>initializing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        
+        initializeTitle: -&gt; 
+            title = @title ? @plural()
+            title = title.call this if _.isFunction title
+            $title = $ "&lt;h1 /&gt;", class: "title", text: title
+            $title
+
+        renderTitle: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>do nothing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        
+        initializeActions: -&gt;
+            
+            @removeSubviews "action"
+
+            $batchActions = $ "&lt;ul/&gt;", class: "actions"
+
+            @allActions = new Ribs.Actions @actions, ribs: this
+            
+            @inlineActions = @allActions.where inline: true
+
+            @batchActions = @allActions.where batch: true
+
+            for action in @batchActions
+                view = new @actionView model: action
+                @subviews("action").push view
+                $batchActions.append view.el
+                view.render()
+
+            $batchActions
+
+        renderActions: -&gt;
+            for view in @subviews("action")
+                view.render() 
+        
+        initializeList: -&gt;
+            $list = $ "&lt;ul/&gt;", class: "list"
+            $list
+
+        renderList: -&gt;
+            for view in @subviews("list")
+                view.render() 
+                view.delegateEvents()
+
+        initializeHeader: -&gt;
+            $header = $ "&lt;div /&gt;", class: "header"
+
+            unless @suppressToggle
+                toggle = $ "&lt;input /&gt;", 
+                    type: "checkbox", 
+                    checked: @selectedByDefault
+                $header.append $ "&lt;div /&gt;", class:"toggle", html: toggle
+
+            unless @displayAttributes?
+                attributes = _.map @collection.first().toJSON(), (v,k) -&gt; 
+                    { field: k }
+            @displayAttributeMap = {}
+            _.each @displayAttributes, (attribute) =&gt;
+                @displayAttributeMap[attribute.field] = attribute
+                label = attribute.label ? attribute.field
+                klass = attribute.class ? attribute.field
+                field = $ "&lt;div/&gt;", 
+                    class: klass
+                    "data-sort-by": (attribute.sortField or attribute.field)
+                field.append label
+                $header.append field
+
+            $header
+
+        renderHeader: -&gt;
+            n = @getNumSelected()
+            l = @getNumTotal()
+            @selectedByDefault = true if n &gt;= l
+            @selectedByDefault = false if n is 0
+            isChecked = n isnt 0
+            isTransparent = isChecked and n &lt; l
+            opacity = if isTransparent then 0.5 else 1
+            @$header.find(".toggle input")
+                .prop("checked", isChecked)
+                .css("opacity", opacity)
+
+        initializeFooter: -&gt;
+            $footer = $ "&lt;div/&gt;", class: "footer"
+            $footer
+
+        renderFooter : -&gt;
+            plural = @getNumTotal() isnt 1
+            word = if plural then @plural() else @itemName
+            @$footer.text "#{@getNumSelected()} / #{@getNumTotal()} #{word} selected"
+
+
+    class Ribs.ListItem extends Backbone.View
+
+        tagName: "li"
+
+        className: "item"
+
+        attributes:
+            tabindex: 0
+
+        _ribsEvents:
+            'click' : 'toggle'
+            'toggle' : 'toggle'
+            'selectitem' : 'select'
+            'deselectitem' : 'deselect'
+            'click a' : 'stopPropogation'
+
+        constructor : (options) -&gt;
+
+            @events ||= {}
+            _.extend @events, @_ribsEvents
+
+            @itemCellView ?= Ribs.ListItemCell
+            @actionView ?= Ribs.InlineAction
+            @view = options?.view</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>create cell views</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            @listItemCells = []
+            for attribute in @view.displayAttributes
+                attribute = _.clone(attribute)
+                attribute.view = @
+                attribute.model = options.model
+                listItemCell = new @itemCellView attribute
+                @listItemCells.push listItemCell
+
+            @inlineActions = []
+            for key, action of @view.inlineActions
+                unless action.filter? and action.filter(@model) is false
+                    inlineAction = new @actionView
+                        model: action
+                        listItem: this
+                    @inlineActions.push inlineAction
+
+            super
+
+            if @model?
+                @listenTo @model, "change", @render
+                @listenTo @model, "remove", @remove
+  
+        render : -&gt;
+
+            @$el.empty()
+            return unless @model
+            @$el.data("cid", @model.cid)
+
+            unless @view.suppressToggle
+                toggle = $ "&lt;input/&gt;",
+                    type: "checkbox"
+                    tabindex: -1
+                if @$el.is ".selected"
+                    $(toggle).prop "checked", true
+                div = $ "&lt;div/&gt;", class: "toggle"
+                div.append toggle
+                @$el.append div</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Render our individual cells</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">for</span> cell <span class="hljs-keyword">in</span> <span class="hljs-property">@listItemCells</span>
+                <span class="hljs-property">@$el</span>.append cell.el
+                cell.render()
+                cell.delegateEvents()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Add inline actions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            ul = $ "&lt;ul/&gt;", class: "actions"
+            for inlineAction in @inlineActions
+                $(ul).append inlineAction.el
+                inlineAction.render()
+                inlineAction.delegateEvents()
+            @$el.append ul
+            
+            this
+
+        toggle: -&gt;
+            unless @$el.is(".disabled")
+                if @$el.is(".selected")
+                    @deselect()
+                else
+                    @select()
+
+        stopPropogation: (e) -&gt;
+            e.stopImmediatePropagation()
+
+        select: (event, options={})-&gt;
+            return if @view.suppressToggle
+            @$el.addClass "selected"
+            @$("input:checkbox").prop "checked", true
+            @model.trigger "selected" unless options.silent
+
+        deselect : (event, options={})-&gt;
+            return if @view.suppressToggle
+            @$el.removeClass "selected"
+            @$("input:checkbox").prop "checked", false
+            @model.trigger "deselected" unless options.silent
+
+        enable : -&gt;
+            @$el.removeClass "disabled"
+            @$("input:checkbox").prop "disabled", false
+            @$el.prop "tabindex", 0
+            @model.trigger "enabled"
+
+        disable :-&gt; 
+            @$el.addClass "disabled"
+            @$("input:checkbox").prop "disabled", true
+            @$el.prop "tabindex", -1
+            @model.trigger "disabled"
+
+        remove: -&gt;
+            @deselect()
+            for inlineAction in @inlineActions
+                inlineAction.remove()
+            for listItemCell in @listItemCells
+                listItemCell.remove()
+            super
+
+
+    class Ribs.ListItemCell extends Backbone.View
+  
+        tagName : "div"
+
+        className: "cell"
+    
+        _ribsEvents:
+            'click .edit' : 'edit'
+            'click .editableField' : 'stopPropagation'
+            'keypress .editableField' : 'handleKeypress'
+            'blur .editableField' : 'saveEditedField'
+  
+        constructor : (options) -&gt;
+
+            @events ||= {}
+            _.extend @events, @_ribsEvents
+            super
+            @$el.addClass(@options.class ? @options.field)
+
+        renderableValue: (nomap) -&gt;
+             
+            value = @model.get @options.field
+
+            if !nomap and _.isFunction @options.map
+                value = @options.map.call @options.view.view, value, @model
+            value ? ""
+
+        render: ()-&gt;
+            @$el.empty()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>cells are rendered as text by default unless <code>escape</code> is false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            if @options.escape is false
+                @$el.html @renderableValue()
+            else
+                @$el.text @renderableValue()
+
+            if @options.editable is true
+                label = @options.label ? @options.field
+                editBtnEl = $ "&lt;span/&gt;",
+                    class: 'edit button inline', 
+                    title: "Edit #{label}"
+                    text: '✎'
+                if @model.get(@options.field) in [undefined, null, '']
+                    $(editBtnEl).addClass('show')
+                else
+                    $(editBtnEl).removeClass('show')
+
+                @$el.append(editBtnEl) 
+
+            this
+
+        edit: (event) -&gt;
+
+            if @options.editable is true
+
+                value = @model.get @options.field
+
+                if _.isFunction @options.edit</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>edit = function could return an html element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    editField = <span class="hljs-property">@options</span>.edit.call <span class="hljs-keyword">this</span>, value, <span class="hljs-property">@model</span>
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> _.isArray <span class="hljs-property">@options</span>.edit</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>edit = array will give a select box</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    editField = $ <span class="hljs-string">"&lt;select/&gt;"</span>
+                    <span class="hljs-keyword">for</span> option <span class="hljs-keyword">in</span> <span class="hljs-property">@options</span>.edit
+                        optionEl = $ <span class="hljs-string">"&lt;option/&gt;"</span>, 
+                            <span class="hljs-attribute">value</span>: option
+                            <span class="hljs-attribute">text</span>: option
+                            <span class="hljs-attribute">selected</span>: option <span class="hljs-keyword">is</span> value
+                        editField.append optionEl
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> _.isObject <span class="hljs-property">@options</span>.edit</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>edit = object will give a select box</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    editField = $ <span class="hljs-string">"&lt;select/&gt;"</span>
+                    <span class="hljs-keyword">for</span> key, option <span class="hljs-keyword">of</span> <span class="hljs-property">@options</span>.edit
+                        optionEl = $ <span class="hljs-string">"&lt;option/&gt;"</span>, 
+                            <span class="hljs-attribute">value</span>: key
+                            <span class="hljs-attribute">text</span>: option
+                            <span class="hljs-attribute">selected</span>: key <span class="hljs-keyword">is</span> value
+                        editField.append optionEl
+                <span class="hljs-keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>no edit property will default to a text box</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    editField = $ <span class="hljs-string">"&lt;input/&gt;"</span>, 
+                        <span class="hljs-attribute">type</span>: <span class="hljs-string">'text'</span>
+                        <span class="hljs-attribute">value</span>: value 
+
+                <span class="hljs-keyword">if</span> _.isElement(editField) <span class="hljs-keyword">or</span> editField <span class="hljs-keyword">instanceof</span> jQuery
+                    $(editField).addClass <span class="hljs-string">"editableField"</span>
+                    <span class="hljs-property">@$el</span>.html editField
+                    $(editField).focus()
+
+            <span class="hljs-literal">false</span>
+
+        <span class="hljs-attribute">stopPropagation</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+            <span class="hljs-literal">false</span>
+
+        <span class="hljs-attribute">saveEditedField</span>:<span class="hljs-function"> -&gt;</span>
+            editField = <span class="hljs-property">@$</span>(<span class="hljs-string">".editableField"</span>)
+            <span class="hljs-keyword">if</span> _.isFunction <span class="hljs-property">@options</span>.save
+                <span class="hljs-property">@options</span>.save.call <span class="hljs-keyword">this</span>, editField, <span class="hljs-property">@model</span>
+            <span class="hljs-keyword">else</span>
+                value = editField.val()
+                changeSet = $.extend <span class="hljs-literal">true</span>, {}, <span class="hljs-property">@model</span>.attributes
+                changeSet[<span class="hljs-property">@options</span>.field] = value
+
+                <span class="hljs-keyword">unless</span> <span class="hljs-property">@model</span>._validate(changeSet, <span class="hljs-property">@model</span>)
+                    <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>do whatever it takes to re-render</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                try
+                    @model.save changeSet, 
+                        success: =&gt; @render()
+                        error: =&gt; @render()
+                catch e
+                    @render()
+        
+        handleKeypress: (e)-&gt;
+            if e.which is 13
+                @saveEditedField()
+                false
+
+    class Ribs.Action extends Backbone.Model
+
+        defaults:
+            min : 1
+            max : -1 # -1 means no maximum
+            arity : null # defining arity will override min/max
+            check : null # defining check will be additional to min/max/arity
+            batch: true
+            inline: false
+
+        initialize: (attributes, options) -&gt;
+
+            @ribs = options.ribs ? @collection.ribs
+
+            if @has "actions"
+                @actions = new Ribs.Actions @get("actions"), ribs: @ribs
+                @min = 0
+
+            if @has("hotkey") and not @ribs.suppressHotKeys
+                @ribs.keyboardManager?.registerHotKey
+                    hotkey: @get "hotkey"
+                    label: @get "label"
+                    namespace: @ribs.keyboardNamespace
+                    context: this
+                    precondition: @allowed
+                    callback: =&gt;
+                        @activate()
+    
+        allowed : (selected) -&gt;
+
+            selected = @getSelected() unless selected?
+
+            l = selected.length
+    
+            allow = false
+    
+            if @get("arity")?
+                a = @get "arity"
+                r1 = a is l       # arity is same as #selected
+                r2 = a is -1      # arity is anything
+                allow = r1 or r2
+            else
+                r1 = @get("min") is -1 or l &gt;= @get("min")   # minimum requirement is satisfied
+                r2 = @get("max") is -1 or l &lt;= @get("max")   # maximum requirement is satisfied
+                allow = r1 and r2
+    
+            if allow and @get("check")?
+                allow = @get("check").call(@ribs, selected)
+    
+            allow
+
+        activate: (selected, listItem)-&gt;
+            selected = @getSelected() unless selected?
+            @get("activate").call @ribs, selected, listItem
+
+        getSelected: -&gt;
+            @ribs.getSelected()
+
+    class Ribs.Actions extends Backbone.Collection
+
+        model: Ribs.Action
+
+    class Ribs.BatchAction extends Backbone.View
+  
+        tagName : "li"
+
+        className: "action"
+    
+        events:
+            'click': 'activateIfAllowed'
+            'keypress': 'keypressed'
+
+        attributes:
+            tabindex: 0
+  
+        render : -&gt;
+
+            btn = $ "&lt;div/&gt;", 
+                class: "button"
+                title: @label(false)
+                html: @label()
+
+            @$el.html btn
+
+            if @model.actions
+
+                cont = $ "&lt;ul/&gt;", 
+                    class: "dropdown"
+                    title: @label(false)
+
+                @model.actions.each (action) -&gt;
+                    view = new Ribs.BatchAction model: action
+                    $(cont).append view.el
+                    view.render()
+
+                $(btn).append cont
+
+            else
+
+                @checkRequirements()
+
+            this
+
+        label: (highlight=true)-&gt;
+            label = @model.get("batchLabel") ? @model.get("label")
+            if highlight and @model.has "hotkey"
+                label = @constructor.highlightHotkey label, @model.get "hotkey"
+            label
+
+        getSelected: -&gt;
+            @model.getSelected()
+
+        getListItem: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>override</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  
+        <span class="hljs-attribute">checkRequirements</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@setEnabled</span> <span class="hljs-property">@model</span>.allowed <span class="hljs-property">@getSelected</span>()
+    
+        setEnabled : <span class="hljs-function"><span class="hljs-params">(enabled)</span> -&gt;</span>
+            <span class="hljs-property">@$el</span>.toggleClass <span class="hljs-string">"disabled"</span>, <span class="hljs-keyword">not</span> enabled
+            idx = <span class="hljs-keyword">if</span> enabled <span class="hljs-keyword">then</span> <span class="hljs-number">0</span> <span class="hljs-keyword">else</span> -<span class="hljs-number">1</span>
+            <span class="hljs-property">@$el</span>.prop <span class="hljs-string">"tabindex"</span>, idx
+
+        <span class="hljs-attribute">activateIfAllowed</span>: <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span>
+            <span class="hljs-keyword">unless</span> <span class="hljs-property">@$el</span>.<span class="hljs-keyword">is</span> <span class="hljs-string">".disabled"</span>
+                <span class="hljs-property">@model</span>.activate <span class="hljs-property">@getSelected</span>(), <span class="hljs-property">@getListItem</span>()
+            <span class="hljs-literal">false</span>
+
+        <span class="hljs-attribute">activate</span>: <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span>
+            <span class="hljs-property">@model</span>.activate <span class="hljs-property">@getSelected</span>(), <span class="hljs-property">@getListItem</span>()
+            <span class="hljs-literal">false</span>
+
+        keypressed : <span class="hljs-function"><span class="hljs-params">(event)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>activate on <return></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> event.which <span class="hljs-keyword">is</span> <span class="hljs-number">13</span>
+                <span class="hljs-property">@activate</span>()
+                <span class="hljs-literal">false</span>
+
+        <span class="hljs-property">@highlightHotkey</span> : <span class="hljs-function"><span class="hljs-params">(label, hotkey)</span> -&gt;</span>
+            template = _.template <span class="hljs-string">"&lt;span class='hotkey'&gt;&lt;strong&gt;&lt;%= hotkey %&gt;&lt;/strong&gt;&lt;/span&gt;"</span>
+            new_label = label.replace hotkey, template <span class="hljs-attribute">hotkey</span>: hotkey
+            <span class="hljs-keyword">if</span> new_label <span class="hljs-keyword">is</span> label
+                new_label = <span class="hljs-string">"<span class="hljs-subst">#{label}</span> <span class="hljs-subst">#{ template hotkey: <span class="hljs-string">"[<span class="hljs-subst">#{hotkey}</span>]"</span>}</span>"</span>
+            new_label
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Ribs</span>.<span class="hljs-title">InlineAction</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Ribs</span>.<span class="hljs-title">BatchAction</span></span>
+
+        <span class="hljs-attribute">label</span>:<span class="hljs-function"> -&gt;</span>
+            label = <span class="hljs-property">@model</span>.get(<span class="hljs-string">"inlineLabel"</span>) ? <span class="hljs-property">@model</span>.get(<span class="hljs-string">"label"</span>)
+            <span class="hljs-keyword">if</span> _.isFunction label
+                label = label.call <span class="hljs-property">@model</span>, <span class="hljs-property">@options</span>.listItem.model
+            label
+
+        <span class="hljs-attribute">getSelected</span>:<span class="hljs-function"> -&gt;</span>
+            [ <span class="hljs-property">@options</span>.listItem.model ]
+
+        <span class="hljs-attribute">getListItem</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@options</span>.listItem</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

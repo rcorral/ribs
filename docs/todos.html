@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>todos.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Changelog.html">
+                Changelog.md
+              </a>
+            
+              
+              <a class="source" href="README.html">
+                README.md
+              </a>
+            
+              
+              <a class="source" href="todos.html">
+                todos.js
+              </a>
+            
+              
+              <a class="source" href="hotkeys.html">
+                hotkeys.coffee
+              </a>
+            
+              
+              <a class="source" href="ribs.html">
+                ribs.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>todos.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>(<span class="keyword">function</span>($){
+
+    $(<span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Firstly, build a Backbone collection with some bootstrap data.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre><span class="keyword">var</span> todos = <span class="keyword">new</span> Backbone.Collection([ 
+            { name: <span class="string">"Go to the gym"</span>, completed: <span class="literal">false</span> },
+            { name: <span class="string">"Send a post card to Elaine"</span>, completed: <span class="literal">false</span> }
+        ]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Next we build a Ribs list for the todos.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre><span class="keyword">var</span> todos_view = <span class="keyword">new</span> Ribs.List({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Reference the collection.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>collection: todos,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Give todos  a better name than the default &#39;item&#39;.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>itemName: <span class="string">"todo"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Jump to the list by hitting <strong>g</strong> and then <strong>t</strong>.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>jumpkey: <span class="string">"t"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>This set of attributes determines what are shown as columns.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>displayAttributes: [
+                {
+                    label: <span class="string">"todo"</span>,
+                    field: <span class="string">"name"</span>,
+                    editable: <span class="literal">true</span>
+                },
+                { 
+                    label: <span class="string">""</span>,
+                    field: <span class="string">"completed"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Convert boolean field to a check mark or empty string.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>map: <span class="keyword">function</span>(complete) { 
+                        <span class="keyword">return</span> complete ? <span class="string">"✓"</span> : <span class="string">""</span>;
+                    }
+                }
+            ],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>We&#39;re providing several different flavors of action here.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>actions: [
+                {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>This label will show up in the keyboard help pane.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>label: <span class="string">"New TODO"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>This overrides the label shown on the button.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>batchLabel: <span class="string">"New"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Hotkey available when focus is within ribs object.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>hotkey: <span class="string">"N"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>No minimum selection criterea.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>min: <span class="number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>This is called on click, or when hotkey is hit
+remember: scope is the <code>Ribs.List</code> instance.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>activate: <span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Ask user for some text.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre><span class="keyword">var</span> name = prompt(<span class="string">"What do you need to do?"</span>);
+                        <span class="keyword">if</span> (name &amp;&amp; name !== <span class="string">""</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Add it to the collection.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre><span class="keyword">var</span> model = <span class="keyword">this</span>.collection.push({ name: name, completed: <span class="literal">false</span>});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Focus the item</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre><span class="keyword">this</span>.getByCid(model.cid).$el.focus();
+                        }
+                    }
+                },
+
+                {
+                    label: <span class="string">"Complete"</span>,
+                    inlineLabel: <span class="string">"✓"</span>,
+                    inline: <span class="literal">true</span>,
+                    batch: <span class="literal">false</span>,
+                    hotkey: <span class="string">"c"</span>,
+                    activate: <span class="keyword">function</span>(selected) {
+                        _.each(selected, <span class="keyword">function</span>(model) {
+                            model.set(<span class="string">"completed"</span>, <span class="literal">true</span>);
+                        });
+                    }
+                },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>This action is completely hidden from the rendered 
+Ribs list. However It is visible on the keyboard
+bindings pane and can be activated by hotkey.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>{
+                    label: <span class="string">"Uncomplete"</span>,
+                    batch: <span class="literal">false</span>,
+                    hotkey: <span class="string">"u"</span>,
+                    min: <span class="number">0</span>,
+                    activate: <span class="keyword">function</span>(selected) {
+                        _.each(selected, <span class="keyword">function</span>(model) {
+                            model.set(<span class="string">"completed"</span>, <span class="literal">false</span>);
+                        });
+                    }
+                },
+                
+                {
+                    label: <span class="string">"More ▾"</span>,
+                    actions: [
+                        {
+                            label: <span class="string">"Clear selected"</span>,
+                            hotkey: <span class="string">"C"</span>,
+                            activate: <span class="keyword">function</span>(selected) {
+                                c = <span class="keyword">this</span>.collection;
+                                _.each(selected, <span class="keyword">function</span>(model) {
+                                    c.remove(model);
+                                });
+                            }
+                        },
+                        {
+                            label: <span class="string">"Clear completed"</span>,
+                            min: <span class="number">0</span>,
+                            activate: <span class="keyword">function</span>(selected) {
+                                c = <span class="keyword">this</span>.collection;
+                                _.each(c.where({completed: <span class="literal">true</span>}), <span class="keyword">function</span>(model) {
+                                    c.remove(model);
+                                });
+                            }
+                        }
+                    ]
+                }
+            ],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>We&#39;re overriding the default item view just to get the
+strike-thru look happening for completed items.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>itemView: Ribs.ListItem.extend({
+                initialize: <span class="keyword">function</span>(options) {
+                    <span class="keyword">var</span> _<span class="keyword">this</span> = <span class="keyword">this</span>;
+                    <span class="keyword">this</span>.model.on(<span class="string">"change"</span>, <span class="keyword">function</span>(){
+                        _<span class="keyword">this</span>.$el.toggleClass(<span class="string">"done"</span>, _<span class="keyword">this</span>.model.get(<span class="string">"completed"</span>));
+                    });
+                }
+            })
+
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Add the Ribs list to the DOM.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>$(<span class="string">"body"</span>).prepend(todos_view.el);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Render the Ribs list.</p>
+
+            </div>
+            
+            <div class="content"><div class="highlight"><pre>todos_view.render();
+        $(<span class="string">"a[href=#showKeyboardBindings]"</span>).click(<span class="keyword">function</span>() {
+            Ribs.getKeyboardManager().showKeyboardBindings();
+            <span class="keyword">return</span> <span class="literal">false</span>;
+        });
+        
+    });
+
+})(jQuery);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
